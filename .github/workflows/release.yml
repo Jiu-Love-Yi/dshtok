@@ -86,16 +86,20 @@ jobs:
         run: |
           set -eu
           # Test with default flags first, then rebuild for the two
-          # architectures the release claims to support. Building both in one
-          # linker invocation is what makes the asset honest about being
-          # universal; lipo -verify_arch proves it afterwards.
+          # architectures the release claims to support. -arch has to be on the
+          # link line as well as the compile line: the objects are fat, but a
+          # linker with no -arch of its own picks the host architecture and
+          # writes a single-slice binary. lipo -verify_arch proves it afterwards.
+          archs="-arch arm64 -arch x86_64"
           make clean
-          make CC=clang CFLAGS="-std=c99 -O2 -Wall -Wextra -Wpedantic -Iinclude -arch arm64 -arch x86_64"
+          make CC=clang CFLAGS="-std=c99 -O2 -Wall -Wextra -Wpedantic -Iinclude $archs" \
+                        LDFLAGS="$archs"
           mkdir -p dist
           cp build/dshtok dist/dshtok-macos-universal
           chmod 755 dist/dshtok-macos-universal
-          lipo dist/dshtok-macos-universal -verify_arch arm64 x86_64
+          file dist/dshtok-macos-universal
           lipo dist/dshtok-macos-universal -info
+          lipo dist/dshtok-macos-universal -verify_arch arm64 x86_64
           ./dist/dshtok-macos-universal --version
 
       - name: upload
