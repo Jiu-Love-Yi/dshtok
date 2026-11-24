@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="553" height="334" viewBox="0 0 553 334" role="img" aria-label="dshtok total output">
+  <title>dshtok total - captured from a real run</title>
+  <rect x="0.5" y="0.5" width="552" height="333" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <path d="M0.5 10.5 A10 10 0 0 1 10.5 0.5 H543 A10 10 0 0 1 553 10.5 V30 H0.5 Z" fill="#161b22"/>
+  <circle cx="18" cy="15" r="5" fill="#ff5f56"/>
+  <circle cx="36" cy="15" r="5" fill="#ffbd2e"/>
+  <circle cx="54" cy="15" r="5" fill="#27c93f"/>
+  <g font-family="SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', monospace" font-size="12.5">
+    <text x="22.0" y="64.5" fill="#f0f6fc" font-weight="bold">dshtok</text>
+    <text x="75.2" y="64.5" fill="#f0f6fc" font-weight="bold">1.0.0</text>
+    <text x="120.8" y="64.5" fill="#f0f6fc" font-weight="bold">-</text>
+    <text x="136.0" y="64.5" fill="#f0f6fc" font-weight="bold">DeepSeek</text>
+    <text x="204.4" y="64.5" fill="#f0f6fc" font-weight="bold">Harness</text>
+    <text x="265.2" y="64.5" fill="#f0f6fc" font-weight="bold">token</text>
+    <text x="310.8" y="64.5" fill="#f0f6fc" font-weight="bold">usage</text>
+    <text x="22.0" y="83.5" fill="#8b949e">source:</text>
+    <text x="82.8" y="83.5" fill="#8b949e">C:/Users/me/.dsh/storages/cost-meter/ledger.json</text>
+    <text x="37.2" y="121.5" fill="#7ee787" font-weight="bold">total</text>
+    <text x="82.8" y="121.5" fill="#7ee787" font-weight="bold">tokens</text>
+    <text x="227.2" y="121.5" fill="#7ee787" font-weight="bold">5,471,055,535</text>
+    <text x="348.8" y="121.5" fill="#7ee787" font-weight="bold">(5.47B)</text>
+    <text x="37.2" y="140.5" fill="#30363d">--------------------------------------------------------</text>
+    <text x="37.2" y="159.5" fill="#c9d1d9">input</text>
+    <text x="242.4" y="159.5" fill="#c9d1d9">170,041,897</text>
+    <text x="348.8" y="159.5" fill="#c9d1d9">3.1%</text>
+    <text x="37.2" y="178.5" fill="#c9d1d9">output</text>
+    <text x="250.0" y="178.5" fill="#c9d1d9">37,503,953</text>
+    <text x="348.8" y="178.5" fill="#c9d1d9">0.7%</text>
+    <text x="37.2" y="197.5" fill="#c9d1d9">cache</text>
+    <text x="82.8" y="197.5" fill="#c9d1d9">read</text>
+    <text x="227.2" y="197.5" fill="#c9d1d9">5,263,509,685</text>
+    <text x="348.8" y="197.5" fill="#c9d1d9">96.2%</text>
+    <text x="37.2" y="216.5" fill="#c9d1d9">cache</text>
+    <text x="82.8" y="216.5" fill="#c9d1d9">write</text>
+    <text x="318.4" y="216.5" fill="#c9d1d9">0</text>
+    <text x="348.8" y="216.5" fill="#c9d1d9">0.0%</text>
+    <text x="37.2" y="235.5" fill="#30363d">--------------------------------------------------------</text>
+    <text x="37.2" y="254.5" fill="#d2a8ff">reasoning</text>
+    <text x="113.2" y="254.5" fill="#d2a8ff">(in</text>
+    <text x="143.6" y="254.5" fill="#d2a8ff">output)</text>
+    <text x="257.6" y="254.5" fill="#d2a8ff">6,994,488</text>
+    <text x="348.8" y="254.5" fill="#d2a8ff">18.7%</text>
+    <text x="394.4" y="254.5" fill="#d2a8ff">of</text>
+    <text x="417.2" y="254.5" fill="#d2a8ff">output</text>
+    <text x="37.2" y="273.5" fill="#c9d1d9">calls</text>
+    <text x="280.4" y="273.5" fill="#c9d1d9">40,481</text>
+    <text x="37.2" y="292.5" fill="#c9d1d9">days</text>
+    <text x="310.8" y="292.5" fill="#c9d1d9">34</text>
+    <text x="348.8" y="292.5" fill="#c9d1d9">2026-10-12</text>
+    <text x="432.4" y="292.5" fill="#c9d1d9">..</text>
+    <text x="455.2" y="292.5" fill="#c9d1d9">2026-11-23</text>
+    <text x="37.2" y="311.5" fill="#ffa657">cost</text>
+    <text x="234.8" y="311.5" fill="#ffa657">CNY</text>
+    <text x="265.2" y="311.5" fill="#ffa657">1,943.20</text>
+    <text x="348.8" y="311.5" fill="#ffa657">(api</text>
+    <text x="386.8" y="311.5" fill="#ffa657">CNY</text>
+    <text x="417.2" y="311.5" fill="#ffa657">1,852.81)</text>
+  </g>
+</svg>

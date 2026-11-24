@@ -1,0 +1,30 @@
+{
+    "version": 2,
+    "config": {
+        "currency": "CNY",
+        "symbol": "¥",
+        "decimals": 2,
+        "exchangeRate": 7.12
+    },
+    "days": {
+        "2026-10-12": {
+            "input": 225053,
+            "output": 30214,
+            "cacheRead": 2705164,
+            "cacheWrite": 0,
+            "reasoning": 5501,
+            "calls": 7,
+            "cost": 12.5,
+            "apiCost": 0.25,
+            "costCny": 89,
+            "apiCostCny": 1.78,
+            "sessions": [
+                {
+                    "id": "session-1",
+                    "at": 1760.5,
+                    "title": "重构 renderer"
+                }
+            ]
+        }
+    }
+}

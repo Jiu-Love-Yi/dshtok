@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "days": {
+    "2026-03-01": {
+      "input": 1,
+      "output": 2,
+      "cacheRead": 3,
+      "cacheWrite": 4
+    }
+  }
+}

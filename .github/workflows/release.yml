@@ -1,0 +1,185 @@
+# dshtok - release pipeline
+#
+# Pushing a tag such as v1.0.0 builds the binary on every supported platform,
+# runs the full test suite on each, and attaches the results to a GitHub
+# Release together with a SHA256SUMS file. scripts/install.sh downloads from
+# exactly these asset names and verifies them against that file, so renaming an
+# asset here means changing the installer too:
+#
+#   dshtok-linux-x86_64          glibc, built on the current ubuntu runner
+#   dshtok-macos-universal       arm64 + x86_64 in one file
+#   dshtok-windows-x86_64.exe    MinGW-w64 UCRT64, no runtime DLLs
+#
+# The tests are a release gate on purpose: a tag must never publish a binary
+# that fails its own suite, so every build job runs `make test` before it copies
+# anything into dist/. The staged binary is what gets attached -- not a rebuild
+# from different flags.
+#
+# workflow_dispatch exists to rehearse the build without publishing: it runs the
+# three build jobs and skips the release job, which only fires for tags.
+
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  linux:
+    name: linux / x86_64
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: build
+        run: make CC=gcc
+
+      - name: test
+        run: make CC=gcc test
+
+      - name: integration
+        run: make CC=gcc integration
+
+      - name: installer
+        run: make CC=gcc installer
+
+      - name: stage
+        run: |
+          set -eu
+          mkdir -p dist
+          cp build/dshtok dist/dshtok-linux-x86_64
+          chmod 755 dist/dshtok-linux-x86_64
+          ./dist/dshtok-linux-x86_64 --version
+
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x86_64
+          path: dist/dshtok-linux-x86_64
+          if-no-files-found: error
+
+  macos:
+    name: macos / universal
+    runs-on: macos-latest
+    timeout-minutes: 10
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: build
+        run: make CC=clang
+
+      - name: test
+        run: make CC=clang test
+
+      - name: integration
+        run: make CC=clang integration
+
+      - name: stage
+        run: |
+          set -eu
+          # Test with default flags first, then rebuild for the two
+          # architectures the release claims to support. Building both in one
+          # linker invocation is what makes the asset honest about being
+          # universal; lipo -verify_arch proves it afterwards.
+          make clean
+          make CC=clang CFLAGS="-std=c99 -O2 -Wall -Wextra -Wpedantic -Iinclude -arch arm64 -arch x86_64"
+          mkdir -p dist
+          cp build/dshtok dist/dshtok-macos-universal
+          chmod 755 dist/dshtok-macos-universal
+          lipo -verify_arch arm64 x86_64 dist/dshtok-macos-universal
+          lipo -info dist/dshtok-macos-universal
+          ./dist/dshtok-macos-universal --version
+
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-universal
+          path: dist/dshtok-macos-universal
+          if-no-files-found: error
+
+  windows:
+    name: windows / x86_64
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup msys2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: false
+          install: >-
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-make
+            make
+
+      - name: build
+        shell: msys2 {0}
+        run: mingw32-make CC=gcc
+
+      - name: test
+        shell: msys2 {0}
+        run: mingw32-make CC=gcc test
+
+      - name: stage
+        shell: msys2 {0}
+        run: |
+          set -eu
+          mkdir -p dist
+          cp build/dshtok.exe dist/dshtok-windows-x86_64.exe
+          ./dist/dshtok-windows-x86_64.exe --version
+
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-x86_64
+          path: dist/dshtok-windows-x86_64.exe
+          if-no-files-found: error
+
+  publish:
+    name: publish
+    # workflow_dispatch is a build rehearsal, not a release.
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [linux, macos, windows]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: fetch artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: checksums
+        run: |
+          set -eu
+          cd dist
+          ls -l
+          # Explicit list rather than a glob, so a missing asset fails here
+          # instead of quietly publishing a SHA256SUMS file with two entries.
+          sha256sum \
+            dshtok-linux-x86_64 \
+            dshtok-macos-universal \
+            dshtok-windows-x86_64.exe > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/dshtok-linux-x86_64
+            dist/dshtok-macos-universal
+            dist/dshtok-windows-x86_64.exe
+            dist/SHA256SUMS
+          fail_on_unmatched_files: true
+          generate_release_notes: true

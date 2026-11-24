@@ -1,0 +1,6 @@
+{
+    "high_only": "\uD800",
+    "low_only": "\uDC00",
+    "high_then_ascii": "\uD800\u0041",
+    "high_then_high": "\uD83D\uD83D"
+}

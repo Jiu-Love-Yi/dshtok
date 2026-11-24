@@ -1,0 +1,38 @@
+{
+  "version": 99,
+  "unknownFutureField": {"nested": [1, 2, 3], "ok": true},
+  "config": {
+    "currency": "USD",
+    "unknownConfigKey": "ignored"
+  },
+  "days": {
+    "2026-05-05": {
+      "input": 7,
+      "output": 8,
+      "cacheRead": 9,
+      "cacheWrite": 10,
+      "unknownDayField": null,
+      "sessions": [
+        {
+          "id": "session-from-the-future",
+          "title": "Future",
+          "at": 1,
+          "input": 7,
+          "output": 8,
+          "cacheRead": 9,
+          "cacheWrite": 10,
+          "mysteryCounter": 123
+        }
+      ],
+      "byProviderModel": {
+        "future:model": {
+          "input": 7,
+          "output": 8,
+          "cacheRead": 9,
+          "cacheWrite": 10,
+          "mysteryCounter": 123
+        }
+      }
+    }
+  }
+}

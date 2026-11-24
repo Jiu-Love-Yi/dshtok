@@ -1,0 +1,11 @@
+{
+    "keep": "first value is shadowed",
+    "count": 1,
+    "other": true,
+    "count": 2,
+    "nested": {"inner": 1, "inner": 2},
+    "count": 3,
+    "escaped_key": 1,
+    "\u0065scaped_key": 2,
+    "keep": "last one wins"
+}

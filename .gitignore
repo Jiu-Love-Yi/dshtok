@@ -1,0 +1,37 @@
+# Build output. `make` writes objects and the binary into build/, the CMake
+# mirror uses build-cmake/.
+/build/
+/build-cmake/
+
+# Compiler and linker products, in case a build is run outside build/.
+*.o
+*.obj
+*.a
+*.lib
+*.exe
+*.exp
+*.ilk
+*.pdb
+*.dSYM/
+
+# Editor and operating system noise.
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# Local coverage and profiling artifacts.
+*.gcda
+*.gcno
+*.gcov
+*.profraw
+*.profdata
+
+# Scratch space for checking a change against a live ledger snapshot, and for
+# any throwaway script that goes with it. A real ledger is the user's own data;
+# it must never be committed, and neither should the files used to inspect one.
+/scratch/
+_*.json
+_*.js

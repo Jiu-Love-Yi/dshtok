@@ -1,0 +1,13 @@
+{
+    "ascii": "plain text",
+    "latin1": "café naïve",
+    "cjk": "中文简体與繁體",
+    "emoji": "😀🎉🚀",
+    "emoji_escaped": "\uD83D\uDE00",
+    "mixed": "a é 中 😀 z",
+    "nul_escape": "a\u0000b",
+    "g_clef": "\uD834\uDD1E",
+    "escapes": "quote \" backslash \\ solidus \/ backspace \b formfeed \f newline \n return \r tab \t",
+    "cent": "\u00A2",
+    "del_char": "\u007F"
+}

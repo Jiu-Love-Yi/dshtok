@@ -1,0 +1,5 @@
+{
+    "unknown_escape": "\q",
+    "short_hex": "\u12",
+    "bad_hex": "\u12g4"
+}

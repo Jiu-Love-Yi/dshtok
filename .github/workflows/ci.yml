@@ -1,0 +1,126 @@
+# dshtok - continuous integration
+#
+# The same tree is built and tested on three toolchains:
+#
+#   linux    ubuntu-latest   gcc
+#   macos    macos-latest    clang
+#   windows  windows-latest  MSYS2 UCRT64 mingw-w64 gcc, inside an msys2 shell
+#
+# Every leg runs `make` and then `make test`. The build step is kept separate
+# from the test step on purpose: a compiler error should be reported as a build
+# failure instead of being buried in the test output. Note that `make test` also
+# builds the binary, because tests/test_cli.c drives it as a child process.
+#
+# Windows is a separate job rather than one more matrix entry because its steps
+# need the literal `shell: msys2 {0}` that msys2/setup-msys2 provides, and that
+# keyword cannot be varied per matrix entry on a single job.
+#
+# The end-to-end shell test (tests/integration.sh) runs as a hard gate on the
+# POSIX runners, where bash, awk and sed behave the way the script assumes. On
+# Windows it is best effort and non-blocking: the script is POSIX sh and its
+# path handling targets Linux and macOS, so it must not turn a green build red.
+
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  unix:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux / gcc
+            os: ubuntu-latest
+            cc: gcc
+          - name: macos / clang
+            os: macos-latest
+            cc: clang
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: build
+        run: make CC=${{ matrix.cc }}
+
+      - name: test
+        run: make CC=${{ matrix.cc }} test
+
+      - name: integration
+        run: make CC=${{ matrix.cc }} integration
+
+      # Drives scripts/install.sh against a local file:// "release", including
+      # the checksum path. The installer is only ever used by Linux and macOS
+      # users, so this belongs on the POSIX legs.
+      - name: installer
+        run: make CC=${{ matrix.cc }} installer
+
+      # shellcheck covers what this suite cannot: the installer only ever runs
+      # on its happy path here, and a shell bug in the sad paths would otherwise
+      # reach a user first. Best effort, because a shellcheck release that grows
+      # a new style rule should not turn the build red.
+      - name: shellcheck (best effort)
+        if: runner.os == 'Linux'
+        continue-on-error: true
+        run: |
+          shellcheck --version > /dev/null 2>&1 || sudo apt-get install -y shellcheck
+          shellcheck scripts/install.sh tests/installer.sh tests/integration.sh
+
+  windows:
+    name: windows / msys2 mingw-w64
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup msys2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: false
+          install: >-
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-make
+            make
+
+      - name: build
+        shell: msys2 {0}
+        run: mingw32-make CC=gcc
+
+      - name: test
+        shell: msys2 {0}
+        run: mingw32-make CC=gcc test
+
+      - name: integration (best effort)
+        shell: msys2 {0}
+        continue-on-error: true
+        run: mingw32-make CC=gcc integration
+
+  pedantic:
+    name: strict c99 / pedantic-errors
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      # -pedantic-errors turns every extension into a hard error, so this fails
+      # the moment a translation unit leans on a compiler extension instead of
+      # standard C99. Installed headers (stdio.h, stdint.h) are exempt because
+      # -Iinclude only adds this project's own headers.
+      - name: compile every source file
+        run: |
+          set -eu
+          for f in src/*.c; do
+            echo "gcc -std=c99 -pedantic-errors $f"
+            gcc -std=c99 -pedantic-errors -O2 -Wall -Wextra -Iinclude -c -o /dev/null "$f"
+          done

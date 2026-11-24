@@ -1,0 +1,19 @@
+# Normalize every text file to LF in the repository, whatever the contributor's
+# platform or core.autocrlf setting. The build inputs and the shell scripts are
+# line-ending sensitive: a CRLF tests/integration.sh fails on Linux and macOS
+# with "bad interpreter: No such file or directory", and a CRLF Makefile breaks
+# every recipe. Normalizing on commit is cheaper than debugging that later.
+* text=auto eol=lf
+
+# Windows-only scripts keep CRLF so they work when checked out on Windows.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary fixtures and artifacts must never be normalized.
+*.png binary
+*.jpg binary
+*.ico binary
+*.exe binary
+*.o binary
+*.a binary

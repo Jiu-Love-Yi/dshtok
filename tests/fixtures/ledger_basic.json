@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "config": {
+    "currency": "CNY",
+    "symbol": "\u00a5",
+    "decimals": 2,
+    "exchangeRate": 7.1
+  },
+  "days": {
+    "2026-01-10": {
+      "input": 100,
+      "output": 200,
+      "cacheRead": 300,
+      "cacheWrite": 400,
+      "reasoning": 50,
+      "calls": 5,
+      "cost": 1.25,
+      "apiCost": 1.0,
+      "costCny": 8.875,
+      "apiCostCny": 7.1,
+      "sessions": [
+        {
+          "id": "session-alpha",
+          "title": "Alpha task",
+          "at": 1768000000000,
+          "input": 100,
+          "output": 200,
+          "cacheRead": 300,
+          "cacheWrite": 400,
+          "reasoning": 50,
+          "calls": 5
+        }
+      ],
+      "byProviderModel": {
+        "deepseek:chat": {
+          "input": 100,
+          "output": 200,
+          "cacheRead": 300,
+          "cacheWrite": 400,
+          "reasoning": 50,
+          "calls": 5
+        }
+      }
+    },
+    "2026-01-11": {
+      "input": 10,
+      "output": 20,
+      "cacheRead": 30,
+      "cacheWrite": 40,
+      "reasoning": 5,
+      "calls": 2,
+      "cost": 0.5,
+      "apiCost": 0.4,
+      "costCny": 3.55,
+      "apiCostCny": 2.84,
+      "sessions": [
+        {
+          "id": "session-alpha",
+          "at": 1768100000000,
+          "input": 10,
+          "output": 20,
+          "cacheRead": 30,
+          "cacheWrite": 40,
+          "reasoning": 5,
+          "calls": 2
+        },
+        {
+          "id": "session-beta",
+          "title": "Beta task",
+          "at": 1768090000000,
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "calls": 1
+        }
+      ],
+      "byProviderModel": {
+        "deepseek:chat": {
+          "input": 10,
+          "output": 20,
+          "cacheRead": 30,
+          "cacheWrite": 40,
+          "reasoning": 5,
+          "calls": 2
+        },
+        "deepseek:reasoner": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "calls": 1
+        }
+      }
+    }
+  }
+}
