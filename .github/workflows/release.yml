@@ -94,8 +94,8 @@ jobs:
           mkdir -p dist
           cp build/dshtok dist/dshtok-macos-universal
           chmod 755 dist/dshtok-macos-universal
-          lipo -verify_arch arm64 x86_64 dist/dshtok-macos-universal
-          lipo -info dist/dshtok-macos-universal
+          lipo dist/dshtok-macos-universal -verify_arch arm64 x86_64
+          lipo dist/dshtok-macos-universal -info
           ./dist/dshtok-macos-universal --version
 
       - name: upload
